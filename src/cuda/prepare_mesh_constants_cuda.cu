@@ -1855,8 +1855,12 @@ void FC_FUNC_(prepare_wavefield_discontinuity_device,
   int size = NDIM * (*nglob_wd);
   cudaMalloc((void**)&(mp->d_displ_wd),size*sizeof(realw));
   cudaMalloc((void**)&(mp->d_accel_wd),size*sizeof(realw));
+  cudaMemset(mp->d_displ_wd, 0, size*sizeof(realw));
+  cudaMemset(mp->d_accel_wd, 0, size*sizeof(realw));
+
   size = NDIM * NGLL2 * (*nfaces_wd);
   cudaMalloc((void**)&(mp->d_traction_wd),size*sizeof(realw));
+  cudaMemset(mp->d_traction_wd, 0, size * sizeof(realw));
 
   #undef gpuCreateCopy_todevice_int
   #undef gpuCreateCopy_todevice_realw
