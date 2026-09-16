@@ -30,6 +30,11 @@ subroutine read_mesh_databases_wavefield_discontinuity()
   allocate(displ_wd(NDIM, nglob_wd), & 
            accel_wd(NDIM, nglob_wd), &
            traction_wd(NDIM, NGLLSQUARE, nfaces_wd))
+
+  !nqdu set zero
+  displ_wd = 0.0_CUSTOM_REAL
+  accel_wd = 0.0_CUSTOM_REAL
+  traction_wd = 0.0_CUSTOM_REAL
 end subroutine read_mesh_databases_wavefield_discontinuity
 
 subroutine open_wavefield_discontinuity_file()

@@ -236,8 +236,10 @@
       !! non-split-node scheme
       !nqdu if (IS_WAVEFIELD_DISCONTINUITY) then
       if (IS_WAVEFIELD_DISCONTINUITY .and. COUPLE_WITH_INJECTION_TECHNIQUE) then
-        call add_displacement_discontinuity_element(ispec, dummyx_loc, &
-                                                  dummyy_loc, dummyz_loc)
+        if(SIMULATION_TYPE == 1 .or. (SIMULATION_TYPE == 3 .AND. BACKWARD_SIMULATION)) then
+          call add_displacement_discontinuity_element(ispec, dummyx_loc, &
+                                                    dummyy_loc, dummyz_loc)
+        endif
       endif
     endif
 

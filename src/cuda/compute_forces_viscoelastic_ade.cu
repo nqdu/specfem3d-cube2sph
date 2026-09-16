@@ -1327,6 +1327,9 @@ void compute_forces_viscoelastic_cuda_ade_(long* Mesh_pointer,
   realw *epsilondev_xx,*epsilondev_xy,*epsilondev_xz;
   realw *epsilondev_yz, *epsilondev_yy,*epsilondev_trace_over_3;
 
+  // we don't add discontinuity in adjoint simulation
+  int is_discon = mp->is_wavefield_discontinuity;
+
   if(*backward_simulation) {
     accel = mp->d_b_accel;
     displ = mp->d_b_displ;
@@ -1346,6 +1349,10 @@ void compute_forces_viscoelastic_cuda_ade_(long* Mesh_pointer,
     epsilondev_yy = mp->d_epsilondev_yy;
     epsilondev_xz = mp->d_epsilondev_xz;
     epsilondev_trace_over_3 = mp->d_epsilon_trace_over_3;
+
+    if(mp->simulation_type == 3) {
+      is_discon = 0;
+    }
   }
 
   #define run_kernel(is_pml,aniso,ispec_ptr,stream) { \
@@ -1364,7 +1371,7 @@ void compute_forces_viscoelastic_cuda_ade_(long* Mesh_pointer,
         mp->d_c15store,mp->d_c16store,mp->d_c22store,mp->d_c23store,mp->d_c24store, \
         mp->d_c25store,mp->d_c26store,mp->d_c33store,mp->d_c34store,mp->d_c35store, \
         mp->d_c36store,mp->d_c44store,mp->d_c45store,mp->d_c46store,mp->d_c55store, \
-        mp->d_c56store,mp->d_c66store,mp->is_wavefield_discontinuity,mp->d_displ_wd, \
+        mp->d_c56store,mp->d_c66store,is_discon,mp->d_displ_wd, \
         mp->d_ispec_to_elem_wd,mp->d_ibool_wd,mp->d_spec_to_CPML, \
         mp->d_ibool_CPML,mp->d_r_trans,mp->d_r_trans_inv,mp->d_pml_kappa, \
         mp->d_pml_d,mp->d_pml_physical_ijk,mp->d_pml_spec_physical, \
